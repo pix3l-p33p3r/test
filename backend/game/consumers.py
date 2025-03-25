@@ -58,6 +58,7 @@ class onlineGameConsumer(AsyncWebsocketConsumer):
     games = {}
     waiting_player = None
     active_connections = {}
+    end_game = False
     async def connect(self):
         game_id = str(uuid.uuid4())
         User = get_user_model()
@@ -197,6 +198,7 @@ class onlineGameConsumer(AsyncWebsocketConsumer):
             await self.close()
             await self.channel_layer.group_discard(f"game_group_{self.game_id}", self.channel_name)
     async def endGame(self, game ,player1, player2): 
+            onlineGameConsumer.end_game = True
             HistoryMatch = apps.get_model('auth_app', 'HistoryMatch')
             if player1['score'] == 5:
                 # print("hi")
@@ -249,14 +251,15 @@ class onlineGameConsumer(AsyncWebsocketConsumer):
                     f"game_group_{self.game_id}",
                     {"type": "game_message", "data": {"type": "error", "message": "Your opponent left the game."}}
                 )
-                match = await database_sync_to_async(HistoryMatch)(
-                    winner=game.users[opponent_id],
-                    loser=game.users[self.player_id],
-                    # match_date=self.date, 
-                    winner_score=game.players[opponent_id]['score'],
-                    loser_score=game.players[self.player_id]['score']
-                )
-                await database_sync_to_async(match.save)()
+                if onlineGameConsumer.end_game == False:
+                    match = await database_sync_to_async(HistoryMatch)(
+                        winner=game.users[opponent_id],
+                        loser=game.users[self.player_id],
+                        # match_date=self.date, 
+                        winner_score=game.players[opponent_id]['score'],
+                        loser_score=game.players[self.player_id]['score']
+                    )
+                    await database_sync_to_async(match.save)()
                 await self.channel_layer.group_send( 
                     f"gamegroup{self.game_id}",
                     {"type": "game_update", "data": {"type" : "endGame", "winner" : game.players[opponent_id], "loser" :  game.players[self.player_id]}},

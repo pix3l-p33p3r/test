@@ -321,8 +321,9 @@ async function fetchUserData() {
     try {
         // Get token from cookies
         const token = getCookieValue('access_token');
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
         const response = await fetch('/api/user/', {
@@ -369,8 +370,9 @@ async function uploadProfileImage(imageFile) {
     try {
         const token = getCookieValue('access_token');
         
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
         
@@ -412,8 +414,9 @@ async function updateUserProfile(userData) {
         // Get token from cookies
         const token = getCookieValue('access_token');
         
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
         
@@ -469,8 +472,9 @@ async function updateEmail(newEmail) {
         // Get token from cookies
         const token = getCookieValue('access_token');
         
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
         
@@ -524,9 +528,10 @@ async function updatePassword(currentPassword, newPassword, confirmPassword) {
         // Get token from cookies
         const token = getCookieValue('access_token');
 
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
-            return false; // Return false if no token
+            window.location.hash = 'login';
+            return;
         }
     
         // Send password update to API
@@ -593,8 +598,9 @@ async function deleteUserProfile() {
     try {
         const token = getCookieValue('access_token');
         
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
         

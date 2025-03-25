@@ -62,8 +62,9 @@ function displayFriends() {
 async function fetchUserInvitations() {
   try {
     const token = getCookieValue('access_token');
-    if (!token) {
+    if (!token){
       console.error('No authentication token found');
+      window.location.hash = 'login';
       return;
     }
     
@@ -169,8 +170,9 @@ async function fetchUserInvitations() {
 async function handleAcceptInvitation(invitationId) {
   try {
     const token = getCookieValue('access_token');
-    if (!token) {
+    if (!token){
       console.error('No authentication token found');
+      window.location.hash = 'login';
       return;
     }
     
@@ -197,8 +199,9 @@ async function handleAcceptInvitation(invitationId) {
 async function handleDeclineInvitation(invitationId) {
   try {
     const token = getCookieValue('access_token');
-    if (!token) {
+    if (!token){
       console.error('No authentication token found');
+      window.location.hash = 'login';
       return;
     }
     
@@ -225,8 +228,9 @@ async function handleDeclineInvitation(invitationId) {
 async function fetchUserFriends() {
   try {
     const token = getCookieValue('access_token');
-    if (!token) {
+    if (!token){
       console.error('No authentication token found');
+      window.location.hash = 'login';
       return;
     }
     
@@ -247,7 +251,7 @@ async function fetchUserFriends() {
     
     const friendsList = data.Friends;
 
-    console.log("Friends response:", friendsList);
+    console.log("Friends response:", data);
 
     //Managing the response
     const friendsContainer = document.querySelector('.friends-list');
@@ -335,8 +339,9 @@ async function fetchUserFriends() {
 async function handleUnfriend(friendId) {
   try {
     const token = getCookieValue('access_token');
-    if (!token) {
+    if (!token){
       console.error('No authentication token found');
+      window.location.hash = 'login';
       return;
     }
     

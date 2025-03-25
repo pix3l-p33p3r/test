@@ -172,40 +172,15 @@ function setupLogin() {
             errorMessage.style.display = 'block';
         }
     }
-    const authIntra = document.querySelector('.alternative-btn.intra-btn');
+    const authIntraButtons = document.querySelectorAll('.alternative-btn.intra-btn');
 
-    authIntra.addEventListener('click', (e) => {
-        e.preventDefault();
-        handleIntraAuth();
+    authIntraButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleIntraAuth();
+        });
     });
 }
-    //     async function handleIntraAuth() {
-//         try {
-//             const response = await fetch('/api/oauth2/authorize');
-            
-//             // if (!response.ok) {
-//             //     throw new Error('Failed to get authorization URL');
-//             // }
-            
-//             const data = await response.json();
-//             console.log('Authorization URL:', data.url);
-            
-//             window.location.href = data.url;
-            
-            
-//         } catch (error) {
-//             console.error('Intra authentication error:', error);
-//             errorMessage.textContent = 'Failed to connect to 42 Intra. Please try again later.';
-//             errorMessage.style.display = 'block';
-//         }
-//     }
-//     const authIntra = document.querySelector('.alternative-btn.intra-btn');
-
-//     authIntra.addEventListener('click', (e) => {
-//         e.preventDefault();
-//         handleIntraAuth();
-//     });
-// }
 
 function displayAuth() {
     // document.getElementById("header").style.visibility = "hidden";

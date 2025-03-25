@@ -20,16 +20,16 @@ function displayGame1() {
             <div class="content">
                 <!-- Welcome Section -->
                 <div class="welcome-section">
-                    <h1 class="welcome-title">Welcome back, PONG</h1>
-                    <p class="welcome-subtitle">Choose a game to play or continue where you left off</p>
+                    <h1 class="welcome-title">Welcome back, To PONG</h1>
+                    <p class="welcome-subtitle">Choose a game to play. </p>
                 </div>
 
                 <!-- Game Boxes -->
                 <div class="game-boxes">
                     <!-- Game 1: Dungeon Crawler (AI Mode) -->
                     <div class="game-box" data-game="ai">
-                        <div class="game-badge">Popular</div>
-                        <div class="game-image" style="background-image: url('/static/resources/adadoun.png')"></div>
+                        
+                        <div class="game-image" style="background-image: url('/static/resources/ninjaAi3.jpeg')"></div>
                         <div class="game-info">
                             <h3 class="game-title">AI Mode</h3>
                             <p class="game-description">Play against an AI opponent in this challenging match.</p>
@@ -39,19 +39,19 @@ function displayGame1() {
 
                     <!-- Game 2: Arena Battle (Local Mode) -->
                     <div class="game-box" data-game="local">
-                        <div class="game-badge">New Season</div>
-                        <div class="game-image" style="background-image: url('/static/resources/adadoun.png')"></div>
+                        
+                        <div class="game-image" style="background-image: url('/static/resources/ninjaAi.jpeg')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Local Mode</h3>
-                            <p class="game-description">Play with a friend on the same device in fast-paced, tactical combat.</p>
+                            <p class="game-description">Play with a friend on the same device, tactical combat.</p>
                             <button class="play-button"><i class="fas fa-play"></i> Play Now</button>
                         </div>
                     </div>
 
                     <!-- Game 3: Puzzle Quest (Online Mode) -->
                     <div class="game-box" data-game="online">
-                        <div class="game-badge">Multiplayer</div>
-                        <div class="game-image" style="background-image: url('/static/resources/adadoun.png')"></div>
+                        
+                        <div class="game-image" style="background-image: url('/static/resources/ninjaAi1.jpeg')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Online Mode</h3>
                             <p class="game-description">Challenge players from around the world in online matches.</p>
@@ -61,8 +61,8 @@ function displayGame1() {
 
                     <!-- Game 4: Space Explorer (Tournament Mode) -->
                     <div class="game-box" data-game="tournament">
-                        <div class="game-badge">Beta</div>
-                        <div class="game-image" style="background-image: url('/static/resources/adadoun.png')"></div>
+                        
+                        <div class="game-image" style="background-image: url('/static/resources/local.jpeg')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Tournament Mode</h3>
                             <p class="game-description">Compete in a tournament with multiple participants to crown a champion.</p>
@@ -99,8 +99,9 @@ function displayGame1() {
                 const token = getCookieValue('access_token');
 
 
-                if (!token) {
+                if (!token){
                     console.error('No authentication token found');
+                    window.location.hash = 'login';
                     return;
                 }
 
@@ -129,6 +130,23 @@ function displayGame1() {
             }
         });
     });
+
+    checkForSelectedGameMode();
+
+    // Add this to your displayGame1 function in game.js after the HTML is set
+    function checkForSelectedGameMode() {
+        const selectedGameMode = localStorage.getItem('selectedGameMode');
+        
+        if (selectedGameMode) {
+            localStorage.removeItem('selectedGameMode');
+            
+            const gameBox = document.querySelector(`.game-box[data-game="${selectedGameMode}"]`);
+            
+            if (gameBox) {
+                gameBox.click();
+            }
+        }
+    }
 
     function startGame(mode, userData) {
         // First, clear the content area
@@ -212,8 +230,7 @@ function displayGame1() {
         animation();
     }
     return function() {
-        console.log("rayan close socket aw9");
-        if(document.getElementById("nicknameModal") != null) 
+        if(document.getElementById("nicknameModal") != null)
             document.getElementById("nicknameModal").style.display = 'none'
         if (currentGame && currentGame.ws && currentGame.ws.readyState === WebSocket.OPEN)
             currentGame.ws.close();
@@ -225,8 +242,9 @@ async function fetchUserData() {
         const token = getCookieValue('access_token');
 
 
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
+            window.location.hash = 'login';
             return;
         }
 

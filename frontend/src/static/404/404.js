@@ -26,14 +26,18 @@ function display404() {
         </div>
 
         <!-- HOME BUTTON -->
-        <a href="#home" class="home-button btn">
+        <a href="#home" id="homeBtn" class="home-button btn">
                 <i class="fas fa-home"></i> Return to Home
         </a>
     </div>
     </section>
     `;
     document.title = '404';
-    // Move the event handlers here, AFTER the HTML has been added to the DOM
+
+    const homeButton = document.getElementById('homeBtn');
+    homeButton.addEventListener('click', () => {
+        window.location.href = window.location.origin + '/#home';
+    });
 }
 
 

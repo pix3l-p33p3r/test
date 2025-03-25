@@ -191,7 +191,26 @@ export async function navigate(route) {
     }
 }
 
+function validUrl() {
+    const tempUrl = window.location.href;
+    const origin = window.location.origin;
+
+    switch (tempUrl) {
+        case `${origin}/`:
+        case `${origin}/#login`:
+        case `${origin}/#home`:
+        case `${origin}/#game-1`:
+        case `${origin}/#profile`:
+        case `${origin}/#friends`:
+        case `${origin}/#404`:
+            break;
+        default:
+            window.location.href = `${origin}/#404`;
+    }
+}
+
 async function loadPage() {
+    validUrl();
     await navigate(location.hash.substring(1));
 }
 
