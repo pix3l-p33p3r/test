@@ -12,10 +12,10 @@ export default function appendHeader() {
                 <input type="text" placeholder="Search..." id="searchInput">
             </div>
             <div class="user-controls">
-                <div class="notification">
+                <!--<div class="notification">
                     <i class="fa-solid fa-bell"></i>
                     <div class="indicator"></div>
-                </div>
+                </div>-->
                 <div id="ProfilePOPuphere" class="profile" style="cursor: pointer;">
                     <img id="profile-pic" src="/static/resources/default.jpg" alt="Player Avatar">
                     <div class="user-info">
@@ -106,7 +106,6 @@ async function fetchAndDisplayCurrentUserData() {
         
     } catch (error) {
         console.error('Error fetching user data:', error);
-        console.log('Failed to load user data. Please try again later.');
     }
 }
 

@@ -40,7 +40,7 @@ function displayGame1() {
                     <!-- Game 2: Arena Battle (Local Mode) -->
                     <div class="game-box" data-game="local">
                         
-                        <div class="game-image" style="background-image: url('/static/resources/ninjaAi.jpeg')"></div>
+                        <div class="game-image" style="background-image: url('/static/resources/localmode.jpeg')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Local Mode</h3>
                             <p class="game-description">Play with a friend on the same device, tactical combat.</p>
@@ -51,7 +51,7 @@ function displayGame1() {
                     <!-- Game 3: Puzzle Quest (Online Mode) -->
                     <div class="game-box" data-game="online">
                         
-                        <div class="game-image" style="background-image: url('/static/resources/ninjaAi1.jpeg')"></div>
+                        <div class="game-image" style="background-image: url('/static/resources/onlinemode.png')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Online Mode</h3>
                             <p class="game-description">Challenge players from around the world in online matches.</p>
@@ -62,7 +62,7 @@ function displayGame1() {
                     <!-- Game 4: Space Explorer (Tournament Mode) -->
                     <div class="game-box" data-game="tournament">
                         
-                        <div class="game-image" style="background-image: url('/static/resources/local.jpeg')"></div>
+                        <div class="game-image" style="background-image: url('/static/resources/tournamentmode2.png')"></div>
                         <div class="game-info">
                             <h3 class="game-title">Tournament Mode</h3>
                             <p class="game-description">Compete in a tournament with multiple participants to crown a champion.</p>
@@ -164,20 +164,20 @@ function displayGame1() {
 
         // Create a back button
         const backButton = document.createElement('button');
-        backButton.style.padding = '14px 24px'; // Increased padding to make button bigger
+        backButton.style.padding = '14px 24px'; 
         backButton.style.backgroundColor = '#c8465f';
         backButton.style.color = '#e6d0d6';
         backButton.style.border = 'none';
         backButton.style.borderRadius = '6px';
         backButton.style.cursor = 'pointer';
-        backButton.style.fontWeight = 'bold'; // Made font weight bolder
-        backButton.style.fontSize = '16px'; // Increased font size
+        backButton.style.fontWeight = 'bold'; 
+        backButton.style.fontSize = '16px';
         backButton.style.transition = 'all 0.2s ease';
         backButton.style.display = 'flex';
         backButton.style.alignItems = 'center';
         backButton.style.gap = '8px';
         backButton.style.marginBottom = '30px';
-        backButton.textContent = 'Back to Menu'; // Added the text "Back to Menu"
+        backButton.textContent = 'Back to Menu';
         // For the hover effect, you'll need to use event listeners
         backButton.addEventListener('mouseenter', function() {
             this.style.backgroundColor = '#a73d53';
@@ -199,7 +199,6 @@ function displayGame1() {
             document.querySelectorAll('.game-box').forEach(box => {
                 box.addEventListener('click', function() {
                     const gameMode = this.getAttribute('data-game');
-                    // console.log("gameMode == " + gameMode);
                     startGame(gameMode, userData);
                 });
             });
@@ -223,7 +222,6 @@ function displayGame1() {
             if (currentGame) {
                 currentGame.update();
                 currentGame.render();
-                // console.log('gameRunning == ' + currentGame.gameRunning);
                 requestAnimationFrame(animation);
             }
         }
@@ -276,123 +274,3 @@ async function fetchUserData() {
 document.addEventListener('DOMContentLoaded', displayGame1);
 
 export default displayGame1;
-
-// import { getCookieValue, isAuthenticated } from "../auth.js";
-// import Game from "../../front/game.js";
-
-// const app = document.getElementById("app");
-
-// function displayGame1() {
-//     document.title = 'Game 1';
-
-//     app.innerHTML = `
-//     <section class="game">
-//     <!-- HEADER CONTAINER -->
-//     <header class="header"></header> 
-//         <!-- MAIN CONTAINER WITH SIDEBAR AND CONTENT -->
-//         <div class="main-container">
-
-//             <!-- 2. LEFT SIDEBAR -->
-//             <div class="left-sidebar"></div>
-
-//             <!-- 3. MAIN CONTENT AREA -->
-//             <div class="content">
-//                 <!-- Welcome Section -->
-//                 <div class="welcome-section">
-//                     <h1 class="welcome-title">Welcome back, Rogue</h1>
-//                     <p class="welcome-subtitle">Choose a game to play or continue where you left off</p>
-//                 </div>
-
-//                 <!-- Game Boxes -->
-//                 <div class="game-boxes">
-//                     <!-- Game 1: Dungeon Crawler -->
-//                     <div class="game-box" data-game="dungeon">
-//                         <div class="game-badge">Popular</div>
-//                         <div class="game-image" style="background-image: url('./resources/adadoun.png')"></div>
-//                         <div class="game-info">
-//                             <h3 class="game-title">Dungeon Crawler</h3>
-//                             <p class="game-description">Explore mysterious dungeons, battle enemies, and collect treasures in this rogue-like adventure.</p>
-//                             <button class="play-button"><i class="fas fa-play"></i> Play Now</button>
-//                         </div>
-//                     </div>
-
-//                     <!-- Game 2: Arena Battle -->
-//                     <div class="game-box" data-game="arena">
-//                         <div class="game-badge">New Season</div>
-//                         <div class="game-image" style="background-image: url('./resources/adadoun.png')"></div>
-//                         <div class="game-info">
-//                             <h3 class="game-title">Arena Battle</h3>
-//                             <p class="game-description">Compete against other players in fast-paced, tactical arena combat.</p>
-//                             <button class="play-button"><i class="fas fa-play"></i> Play Now</button>
-//                         </div>
-//                     </div>
-
-//                     <!-- Game 3: Puzzle Quest -->
-//                     <div class="game-box" data-game="puzzle">
-//                         <div class="game-image" style="background-image: url('./resources/adadoun.png')"></div>
-//                         <div class="game-info">
-//                             <h3 class="game-title">Puzzle Quest</h3>
-//                             <p class="game-description">Train your brain with challenging puzzles and riddles.</p>
-//                             <button class="play-button"><i class="fas fa-play"></i> Play Now</button>
-//                         </div>
-//                     </div>
-
-//                     <!-- Game 4: Space Explorer -->
-//                     <div class="game-box" data-game="space">
-//                         <div class="game-badge">Beta</div>
-//                         <div class="game-image" style="background-image: url('./resources/adadoun.png')"></div>
-//                         <div class="game-info">
-//                             <h3 class="game-title">Space Explorer</h3>
-//                             <p class="game-description">Navigate through the cosmos, discover new planets, and build your galactic empire.</p>
-//                             <button class="play-button"><i class="fas fa-play"></i> Play Now</button>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-
-//         </div>
-//     </section>
-//     `;
-
-//     // Add event listeners to game boxes
-//     document.querySelectorAll('.game-box').forEach(box => {
-//         box.addEventListener('click', async function() {
-//             try {
-//                 const token = getCookieValue('access_token');
-//                 console.log(token);
-
-//                 if (!token) {
-//                     console.error('No authentication token found');
-//                     return;
-//                 }
-
-//                 const response = await fetch('/api/user', {
-//                     method: 'GET',
-//                     headers: {
-//                         'Authorization': `Bearer ${token}`,
-//                         'Content-Type': 'application/json'
-//                     }
-//                 });
-
-//                 console.log("Response:", response);
-
-//                 if (!response.ok) {
-//                     throw new Error('Failed to fetch user data');
-//                 }
-
-//                 const userData = await response.json();
-//                 console.log(userData);
-
-//             } catch (error) {
-//                 console.error('Error fetching user data:', error);
-//                 alert('Failed to load user data. Please try again later.');
-//             }
-//         });
-//     });
-// }
-
-// // Run the function when the DOM is ready
-// document.addEventListener('DOMContentLoaded', displayGame1);
-
-// // Export the function
-// export default displayGame1;

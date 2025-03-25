@@ -55,7 +55,6 @@ function displayFriends() {
     document.title = 'Friends';
     fetchUserInvitations();
     fetchUserFriends();
-    // Move the event handlers here, AFTER the HTML has been added to the DOM
 }
 
 
@@ -77,17 +76,13 @@ async function fetchUserInvitations() {
     });
     
     if (!response.ok) {
-      console.log("Error with response:", response);
       throw new Error('Failed to fetch invitations');
     }
     
     const responseData = await response.json();
-    console.log("Invitations response:", responseData);
     
-    // Get the invitations array from the response
     const invitationsList = responseData.Invitations || [];
     
-    // Get the container
     const requestsContainer = document.querySelector('.friend-requests');
     
     // Clear existing content except the title
@@ -97,23 +92,18 @@ async function fetchUserInvitations() {
     
     // Check if there are invitations
     if (invitationsList && invitationsList.length > 0) {
-      // Loop through invitations and create elements
       invitationsList.forEach(invitation => {
-        // Extract sender information from the invitation object
         const sender = invitation.sender;
         
         const requestCard = document.createElement('div');
         requestCard.className = 'request-card';
-        // You may need to adjust if your invitation has its own ID
         requestCard.dataset.invitationSenderId = sender.id;
         //Detect image
         let imageTemp;
     
         if (sender.uploaded_image) {
-            console.log('' + sender.uploaded_image);
             imageTemp = '' + sender.uploaded_image;
         } else if (sender.image_url) {
-            console.log(sender.image_url);
             imageTemp = sender.image_url;
         } else {
             imageTemp = '/static/resources/default.jpg';
@@ -187,12 +177,11 @@ async function handleAcceptInvitation(invitationId) {
     if (!response.ok) {
       throw new Error('Failed to accept invitation');
     }
-    console.log(response.message);
     // Refresh data after accepting
     fetchUserInvitations();
     fetchUserFriends();
   } catch (error) {
-    console.log('Error accepting invitation:', error);
+    console.error('Error accepting invitation:', error);
   }
 }
 
@@ -217,7 +206,6 @@ async function handleDeclineInvitation(invitationId) {
       throw new Error('Failed to decline invitation');
     }
     
-    // Refresh invitations after declining
     fetchUserInvitations();
   } catch (error) {
     console.error('Error declining invitation:', error);
@@ -243,15 +231,12 @@ async function fetchUserFriends() {
     });
     
     if (!response.ok) {
-      console.log("Error with response:", response);
       throw new Error('Failed to fetch friends');
     }
     
     const data = await response.json();
     
     const friendsList = data.Friends;
-
-    console.log("Friends response:", data);
 
     //Managing the response
     const friendsContainer = document.querySelector('.friends-list');
@@ -273,10 +258,8 @@ async function fetchUserFriends() {
         let imageTemp;
     
         if (friend.uploaded_image) {
-            console.log('' + friend.uploaded_image);
             imageTemp = '' + friend.uploaded_image;
         } else if (friend.image_url) {
-            console.log(friend.image_url);
             imageTemp = friend.image_url;
         } else {
             imageTemp = '/static/resources/default.jpg';

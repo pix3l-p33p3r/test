@@ -19,12 +19,12 @@ function displayHome() {
                 <div class="futuristic-banner">
                     <div class="banner-content">
                         <div class="banner-text">
-                            <h2>EPIC QUEST</h2>
+                            <h2>PONG Game</h2>
                             <p>Begin your adventure</p>
                         </div>
                         <!-- image container --> 
                     	<div class="banner-image">
-                            <img src="/static/resources/banner.png" alt="Epic Quest Banner">
+                            <img src="/static/resources/aimode2.jpg" alt="Epic Quest Banner">
                         </div>
                 	</div>
             	</div>
@@ -84,7 +84,7 @@ function displayHome() {
                                 <div class="slide" data-game-mode="local">
                                     <div class="game-content">
                                         <div class="game-image1">
-                                            <img src="/static/resources/ninjaAi.jpeg" alt="Local Game">
+                                            <img src="/static/resources/localmode.jpeg" alt="Local Game">
                                             <div class="game-title1-overlay">
                                                 <h3>Local Multiplayer</h3>
                                             </div>
@@ -96,7 +96,7 @@ function displayHome() {
                                 <div class="slide" data-game-mode="online">
                                     <div class="game-content">
                                         <div class="game-image1">
-                                            <img src="/static/resources/ninjaAi1.jpeg" alt="Online Game">
+                                            <img src="/static/resources/onlinemode.png" alt="Online Game">
                                             <div class="game-title1-overlay">
                                                 <h3>Online Match</h3>
                                             </div>
@@ -108,7 +108,7 @@ function displayHome() {
                                 <div class="slide" data-game-mode="tournament">
                                     <div class="game-content">
                                         <div class="game-image1">
-                                            <img src="/static/resources/local.jpeg" alt="Tournament">
+                                            <img src="/static/resources/tournamentmode2.png" alt="Tournament">
                                             <div class="game-title1-overlay">
                                                 <h3>Tournament</h3>
                                             </div>
@@ -145,9 +145,9 @@ async function fetchUserAndUpdateWelcome() {
     try {
         // Get token from cookies
         const token = getCookieValue('access_token');
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
-            updateWelcomeMessage('Adventurer');
+            window.location.hash = 'login';
             return;
         }
         
@@ -166,7 +166,6 @@ async function fetchUserAndUpdateWelcome() {
         }
         
         const data = await response.json();
-        console.log("User data:", data);
         
         // Check if the response contains user data in the expected structure
         if (data.status === true && data.user && data.user.username) {
@@ -290,7 +289,7 @@ function getCookieValue(name) {
             return cookieValue;
         }
     }
-    return null; // Return null if the cookie is not found
+    return null;
 }
 
 // Function to fetch game performance data from backend
@@ -298,9 +297,9 @@ async function fetchGamePerformance() {
     try {
         // Get token from cookies
         const token = getCookieValue('access_token');
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
-            displayNoPerformanceData();
+            window.location.hash = 'login';
             return;
         }
         
@@ -319,7 +318,6 @@ async function fetchGamePerformance() {
         }
         
         const data = await response.json();
-        console.log("Game performance data:", data);
         
         // Check if the response contains user data in the expected structure
         if (data.status === true && data.user) {
@@ -425,7 +423,6 @@ function displayGamePerformance(userData) {
                     }
                 }
             });
-            console.log('Pie chart initialized successfully');
         } catch (error) {
             console.error('Error creating chart:', error);
             // If chart creation fails, display text data instead
@@ -462,9 +459,9 @@ async function fetchTopPlayers() {
     try {
         // Get token from cookies
         const token = getCookieValue('access_token');
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
-            displayNoPlayersData();
+            window.location.hash = 'login';
             return;
         }
         
@@ -483,7 +480,6 @@ async function fetchTopPlayers() {
         }
         
         const data = await response.json();
-        console.log("Top players data:", data);
         
         // Check for the correct property name in the response
         const leaderboardData = data.TopPlayers;
@@ -583,9 +579,9 @@ async function fetchRecentGames() {
     try {
         // Get token from cookies
         const token = getCookieValue('access_token');
-        if (!token) {
+        if (!token){
             console.error('No authentication token found');
-            displayNoRecentGames();
+            window.location.hash = 'login';
             return;
         }
         
@@ -604,7 +600,6 @@ async function fetchRecentGames() {
         }
         
         const data = await response.json();
-        console.log("Recent games data:", data);
         
         // Check for the correct property name in the response
         const recentGamesData = data.HistoryMatches;

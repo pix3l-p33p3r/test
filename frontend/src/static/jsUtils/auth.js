@@ -1,7 +1,4 @@
-// export function isAuthenticated() {
-//     const token = getCookieValue('access_token');
-//     return !!token;
-// }
+
 
 export function isAuthenticated() {
     const token = getCookieValue('access_token');
@@ -44,10 +41,8 @@ export function setProfileImage(userData) {
     let imageTemp;
     
     if (userData.user.uploaded_image) {
-        console.log('' + userData.user.uploaded_image);
         imageTemp = '' + userData.user.uploaded_image;
     } else if (userData.user.image_url) {
-        console.log(userData.user.image_url);
         imageTemp = userData.user.image_url;
     } else {
         imageTemp = '/static/resources/default.jpg';

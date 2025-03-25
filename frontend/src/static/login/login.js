@@ -92,10 +92,8 @@ function setupLogin() {
                 },
                 body: JSON.stringify(data)
             });
-            console.log(data);
             
             const result = await response.json();
-            console.log("HERERTERYTF ", result.message);
             if (!response.ok) {
                 // Instead of throwing a new error with hardcoded message,
                 // return the actual error from the server
@@ -144,7 +142,6 @@ function setupLogin() {
         console.log("signup response:", result.message);
         if (result.ok) {
             window.location.hash = 'home';
-            // alert('Account created successfully!');
         } else {
             errorMessage2.textContent = 'Invalid input!';
             errorMessage2.style.display = 'block';

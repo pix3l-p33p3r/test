@@ -1,19 +1,4 @@
 /* Home Page */
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body {
-	font-family: 'Montserrat', sans-serif;
-	background-color: #1a0f14;
-	color: #e6d0d6;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-}
 
 /* Main Container */
 .main-container {
@@ -236,7 +221,7 @@ body {
 	position: relative;
 	z-index: 1;
 	height: calc(100vh - 80px);
-	overflow-y: auto;
+	overflow: none;
 	display: flex;
 	flex-direction: column;
 }

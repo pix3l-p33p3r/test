@@ -116,7 +116,6 @@ function appendSideBar() {
                     });
                     
                     if (response.ok) {
-                        console.log('Successfully logged out on server');
                         window.location.hash = DEFAULT_UNAUTH_ROUTE;
                     } else {
                         console.error('Server logout failed:', await response.text());
@@ -136,9 +135,7 @@ function appendSideBar() {
 let clean = null;
 
 export async function navigate(route) {
-    // Show loading indicator (optional)
-    console.log("Navigating to:", route);
-    console.log("Authentication status:", isAuthenticated());
+    // Show loading indicator (optional)=
     console.log("Route=" + route);
     document.body.classList.add('loading');
     
