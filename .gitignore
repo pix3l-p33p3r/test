@@ -1,6 +1,6 @@
 file.tldr
 TestCases.json
-postgres
+# postgres
 backend/auth_app/__pycache__
 backend/auth_app/api/__pycache__
 backend/auth_app/game/__pycache__
