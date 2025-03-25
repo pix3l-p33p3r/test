@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sci-fi low poly drone
+* source:	https://sketchfab.com/3d-models/sci-fi-low-poly-drone-b984dfc599e74a088194a2a749236e9b
+* author:	f3nix (https://sketchfab.com/f3nix)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sci-fi low poly drone" (https://sketchfab.com/3d-models/sci-fi-low-poly-drone-b984dfc599e74a088194a2a749236e9b) by f3nix (https://sketchfab.com/f3nix) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

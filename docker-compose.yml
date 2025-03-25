@@ -1,0 +1,152 @@
+networks:
+  groups:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './postgres'
+  backend:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './backend'
+  frontend:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './frontend'
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - groups
+    restart: unless-stopped
+
+  backend:
+    image: python:3.11
+    container_name: backend
+    pull_policy: build
+    build: ./backend
+    env_file:
+      - .env
+    volumes:  
+      - backend:/files
+    restart: unless-stopped
+    networks:
+      - groups
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    pull_policy: build
+    networks:
+      - groups
+    init: true
+    volumes:
+      - frontend:/app
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    pull_policy: build
+    ports:
+      - "5000:443"
+    env_file:
+      - .env
+    volumes:
+      - ./backend/media:/files/media/
+    networks:
+      - groups
+    depends_on:
+      - backend
+      - frontend
+
+  postgres-exporter:
+    image: postgres-exporter
+    build: ./exporters/postgres/
+    container_name: postgres-exporter
+    ports:
+      - "9187:9187"
+    networks:
+      - groups
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DATA_SOURCE_NAME=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$DB_HOST:$DB_PORT/$POSTGRES_DB?sslmode=disable
+    init: true
+
+  prometheus:
+    image: prometheus
+    build: ./prometheus
+    container_name: prometheus
+    expose:
+      - 9090
+    networks:
+      - groups
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    depends_on:
+      nginx:
+        condition: service_healthy
+    volumes:
+      - ./prometheus/tools/prometheus.yml:/etc/prometheus/prometheus.yml
+    init: true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9090/metrics"]
+      interval: 10m
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+
+  grafana:
+    image: grafana
+    build: ./grafana
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=$GRAFANA_USER
+      - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_PASSWORD
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_PROVISIONING_ENABLED=true
+    volumes:
+      - ./grafana/tools/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./grafana/tools/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+    ports:
+      - 3000:3000
+    networks:
+      - groups
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    init: true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000"]
+      interval: 10m
+      timeout: 5s
+      retries: 3
+      start_period: 30s
