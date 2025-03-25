@@ -6,15 +6,15 @@ up: ensure_postgres
 down:
 	@docker compose down
 
-re: down fclean up
-# re: down up
+# re: down fclean up
+re: down up
 
 stop: 
 	@docker compose stop
 
 fclean: 
 	@docker compose down --rmi all --volumes
-	@docker system prune -a 
+	@docker system prune -a
 	@docker builder prune -a
 	@echo "Cleaned"
 

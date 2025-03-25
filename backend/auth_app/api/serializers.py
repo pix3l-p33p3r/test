@@ -8,8 +8,6 @@ from auth_app.models import Invitation, Friend, HistoryMatch
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
-    # img_url = serializers.SerializerMethodField()
-    
     class Meta:
         model = User
         fields = [
@@ -23,12 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
             'total_game_played',
             'score'
         ]
-    # def get_img_url(self):
-    #     if self.uploaded_image:  # Direct access to the attribute
-    #         return self.uploaded_image  # Assuming it's a FileField/ImageField
-    #     if self.image_url:  # Direct access to image_url
-    #         return self.image_url  # Default image URL
-    #     return None
 
 class UpdatePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField(write_only=True, required=True)
@@ -50,12 +42,20 @@ class UpdatePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 "pass2": "The two password fields didn't match."
             })
-        try:
-            validate_password(data['pass1'])
-        except ValidationError as e:
-            raise serializers.ValidationError({
-                "pass1": list(e.messages)
-            })
+        
+        password = data['pass1']
+
+        if len(password) < 8:
+            raise serializers.ValidationError({"password": "Password must be at least 8 characters long."})
+
+        if not any(char.isupper() for char in password):
+            raise serializers.ValidationError({"password": "Password must contain at least one uppercase letter."})
+
+        if not any(char.islower() for char in password):
+            raise serializers.ValidationError({"password": "Password must contain at least one lowercase letter."})
+
+        if not any(char.isdigit() for char in password) and not any(char in '!@#$%^&*(),.?":{}|<>' for char in password):
+            raise serializers.ValidationError({"password": "Password must contain at least one digit or special character."})
 
         return data
 
@@ -95,6 +95,18 @@ class UserSignupSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=validated_data['email']).exists():
             raise serializers.ValidationError({"email": "This email is already registered."})
 
+        if len(validated_data['password']) < 8:
+            raise serializers.ValidationError({"password": "Password must be at least 8 characters long."})
+
+        if not any(char.isupper() for char in validated_data['password']):
+            raise serializers.ValidationError({"password": "Password must contain at least one uppercase letter."})
+
+        if not any(char.islower() for char in validated_data['password']):
+            raise serializers.ValidationError({"password": "Password must contain at least one lowercase letter."})
+
+        if not any(char.isdigit() for char in validated_data['password']) and not any(char in '!@#$%^&*(),.?":{}|<>' for char in validated_data['password']):
+            raise serializers.ValidationError({"password": "Password must contain at least one digit or special character."})
+
         return validated_data
 
     def create(self, validated_data):
@@ -129,7 +141,6 @@ class ListAllUsersSer(serializers.ModelSerializer):
             'score',
             'full_name',
             'img_url',
-            # 'uploaded_image',
             'bio',
             'total_game_played',
         ]

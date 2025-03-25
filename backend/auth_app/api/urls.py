@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
 
     SignupApi, LoginApi, LogoutApi, RefreshTokenApi, Oauth2AuthorizeApi, Oauth2CallbackApi, ListAllUsers,
@@ -43,7 +43,7 @@ urlpatterns = [
     path('2fa/enable', Enable2FA.as_view()),
     path('2fa/disable', Disable2FA.as_view()),
     path('2fa/verify', Verify2FA.as_view()),
-	#path('', include('django_prometheus.urls')),
+	path('', include('django_prometheus.urls')),
 
 ]
 

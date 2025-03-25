@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 	'django_prometheus',
+
     'auth_app',
     'game',
     'channels',
@@ -67,8 +69,9 @@ CHANNEL_LAYERS = {
 }
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django_prometheus.middleware.PrometheusBeforeMiddleware',
+
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,7 +83,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 
     'django_prometheus.middleware.PrometheusAfterMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware',
 
 ]
 CORS_ALLOW_CREDENTIALS = True

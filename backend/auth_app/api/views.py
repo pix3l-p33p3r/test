@@ -29,13 +29,11 @@ class TopPlayers(APIView):
             decoded_payload = jwtgenerator.verify_token(token, settings.ACCESS_SECRET_KEY, "access")
             user_id = decoded_payload['user_id']
             
-            # Check if there are at least 3 players in the User table
             if User.objects.count() < 3:
                 return responses.success_response("Not enough players in the database", status.HTTP_200_OK)
             
-            # Fetch the top 3 players based on their scores
             top_players = User.objects.order_by('-score')[:3]
-            top_players_data = [{"id": player.id, "username": player.username, "score": player.score} for player in top_players]
+            top_players_data = UserSerializer(top_players, many=True).data
             
             return Response({
                 'state': True,
@@ -44,7 +42,6 @@ class TopPlayers(APIView):
         
         except Exception as e:
             return responses.error_response(str(e), None, status.HTTP_400_BAD_REQUEST)
-        
 
 class HistoryMatches(APIView):
     @is_authenticated
@@ -192,7 +189,6 @@ class UpdateFields(APIView):
             return responses.success_response("Data modified successfully", status.HTTP_200_OK)
         return responses.error_response(None, serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-#if have an image uploaded should be deleted too.
 class DeleteUserProfile(APIView):
     @is_authenticated
     def delete(self, request):
@@ -207,17 +203,19 @@ class DeleteUserProfile(APIView):
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
             return responses.error_response("Unauthorized Request", None, status.HTTP_401_UNAUTHORIZED)
-        
+
         token = authorization_header.split(' ')[1]
         decoded_payload = jwtgenerator.verify_token(token, settings.ACCESS_SECRET_KEY, "access")
         user_id = decoded_payload['user_id']
         try:
             try:
                 user = User.objects.get(id=user_id)
+                if user.in_game:
+                    return responses.error_response("Cant Delete your profile while you are in game", None, status.HTTP_404_NOT_FOUND)
 
             except User.DoesNotExist:
                 return responses.error_response("User not found", None, status.HTTP_404_NOT_FOUND)
-            
+
             user.delete()
             response =  responses.success_response("User profile deleted successfully", status.HTTP_204_NO_CONTENT)
             response.delete_cookie('access_token')
@@ -300,20 +298,24 @@ class SignupApi(APIView):
         Forum :{full_name, username, email, password}
     """
     def post(self, request):
-        serializer = UserSignupSerializer(data=request.data)
-        if serializer.is_valid():
-            User = serializer.save()
-            access_token, refresh = jwtgenerator.generate_tokens(User.id)
-            response = Response(
-            {   "state" : True,
-                "message": "User created successfully",
-            }, status=status.HTTP_201_CREATED)
-            response.set_cookie(
-                key = 'access_token',
-                value = str(access_token),
-            )
-            return response
-        return responses.error_response(None, serializer.errors, status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer = UserSignupSerializer(data=request.data)
+            if serializer.is_valid():
+                User = serializer.save()
+                access_token, refresh = jwtgenerator.generate_tokens(User.id)
+                response = Response(
+                {   "state" : True,
+                    "message": "User created successfully",
+                }, status=status.HTTP_201_CREATED)
+                response.set_cookie(
+                    key = 'access_token',
+                    value = str(access_token),
+                )
+                return response
+            else:
+                return responses.error_response(None, serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return responses.error_response(str(e), None, status.HTTP_400_BAD_REQUEST)
 
 class LoginApi(APIView):
     """
@@ -354,7 +356,6 @@ class Oauth2AuthorizeApi(APIView):
 class Oauth2AuthorizeApi(APIView):
     def get(self, request):
         uid = config('UID')
-        print(uid)
         redirect_uri = "https://localhost:5000/api/oauth2/callback"
         authorization_url = "https://api.intra.42.fr/oauth/authorize"
         params = {
